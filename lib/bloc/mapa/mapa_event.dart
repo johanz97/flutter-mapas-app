@@ -14,6 +14,13 @@ class OnMarcarRecorrido extends MapaEvent {}
 
 class OnSeguirUbicacion extends MapaEvent {}
 
+class OnCrearRutaInicioDestino extends MapaEvent {
+  final List<LatLng> coordenadas;
+  final double distancia;
+  final double duracion;
+  OnCrearRutaInicioDestino(this.coordenadas, this.distancia, this.duracion);
+}
+
 class OnMovioMapa extends MapaEvent {
   final LatLng centroMapa;
   OnMovioMapa(this.centroMapa);
