@@ -24,8 +24,12 @@ class SearchBar extends StatelessWidget {
           width: width,
           child: GestureDetector(
             onTap: () async {
+              final proximidad =
+                  context.read<MiUbicacionBloc>().state.ubicacion;
+              final historial = context.read<BusquedaBloc>().state.historial;
               final resultado = await showSearch(
-                  context: context, delegate: SearchDestination());
+                  context: context,
+                  delegate: SearchDestination(proximidad!, historial));
               retornoBusqueda(context, resultado!);
             },
             child: Container(
@@ -51,12 +55,40 @@ class SearchBar extends StatelessWidget {
     );
   }
 
-  void retornoBusqueda(BuildContext context, SearchResult result) {
+  Future retornoBusqueda(BuildContext context, SearchResult result) async {
     if (result.cancelo) return;
 
+    final busquedaBloc = context.read<BusquedaBloc>();
     if (result.manual!) {
-      context.read<BusquedaBloc>().add(OnActivarMarcadorManual());
+      busquedaBloc.add(OnActivarMarcadorManual());
       return;
     }
+
+    calculandoAlerta(context);
+
+    //Calcular la ruta
+    final trafficService = TrafficService();
+    final mapaBloc = context.read<MapaBloc>();
+
+    final inicio = context.read<MiUbicacionBloc>().state.ubicacion;
+    final destino = result.position;
+
+    final drivingResponse =
+        await trafficService.getCordsInicioFin(inicio!, destino!);
+
+    final geometry = drivingResponse.routes[0].geometry;
+    final duration = drivingResponse.routes[0].duration;
+    final distance = drivingResponse.routes[0].distance;
+
+    final points = Poly.Polyline.Decode(encodedString: geometry, precision: 6);
+    final List<LatLng> rutaCoordenadas = points.decodedCoords
+        .map((point) => LatLng(point[0], point[1]))
+        .toList();
+
+    mapaBloc.add(OnCrearRutaInicioDestino(rutaCoordenadas, distance, duration));
+    Navigator.of(context).pop();
+
+    //Agregar historial
+    busquedaBloc.add(OnAgregarHistorial(result));
   }
 }

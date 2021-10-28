@@ -20,7 +20,9 @@ class _MapaPageState extends State<MapaPage> {
 
   @override
   void dispose() {
-    context.read<MiUbicacionBloc>().cancelarSeguimiento();
+    if (context.read() != null) {
+      context.read<MiUbicacionBloc>().cancelarSeguimiento();
+    }
     super.dispose();
   }
 
