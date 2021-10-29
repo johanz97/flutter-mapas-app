@@ -72,20 +72,21 @@ class SearchBar extends StatelessWidget {
 
     final inicio = context.read<MiUbicacionBloc>().state.ubicacion;
     final destino = result.position;
-
     final drivingResponse =
         await trafficService.getCordsInicioFin(inicio!, destino!);
 
     final geometry = drivingResponse.routes[0].geometry;
     final duration = drivingResponse.routes[0].duration;
     final distance = drivingResponse.routes[0].distance;
+    final nombreDestino = result.nombreDestino;
 
     final points = Poly.Polyline.Decode(encodedString: geometry, precision: 6);
     final List<LatLng> rutaCoordenadas = points.decodedCoords
         .map((point) => LatLng(point[0], point[1]))
         .toList();
 
-    mapaBloc.add(OnCrearRutaInicioDestino(rutaCoordenadas, distance, duration));
+    mapaBloc.add(OnCrearRutaInicioDestino(
+        rutaCoordenadas, distance, duration, nombreDestino!));
     Navigator.of(context).pop();
 
     //Agregar historial
