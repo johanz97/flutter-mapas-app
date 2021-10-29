@@ -10,8 +10,8 @@ A mobile application created with Flutter using bloc as a state manager
 </ul>
 
 <p align="center">
+  <img src="https://user-images.githubusercontent.com/25967495/139511016-cf90463b-6cab-455b-9b70-458d06e07f3c.jpg" width="250" height="500">
   <img src="https://user-images.githubusercontent.com/25967495/139511019-001b796f-ce97-40cc-860b-da374d24f7b6.jpg" width="250" height="500">
-  <img src="https://user-images.githubusercontent.com/25967495/139511022-44a2ee53-e7ed-4b6a-9c5d-335a9a3b34e3.jpg" width="250" height="500">
   <img src="https://user-images.githubusercontent.com/25967495/139511025-999e32d7-fb1e-4adf-b722-19daea1bcf9c.jpg" width="250" height="500">
 </p>
 
